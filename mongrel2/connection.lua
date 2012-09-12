@@ -100,8 +100,8 @@ end
 ]]
 function Connection:send(uuid, conn_id, msg)
     conn_id = tostring(conn_id)
-    local header = format('%s %d:%s,', uuid, conn_id:len(), conn_id)
-    return self.resp:send(header .. ' ' .. msg)
+    local header = format('%s %d:%s, ', uuid, conn_id:len(), conn_id)
+    return self.resp:send(header .. msg)
 end
 
 --[[
