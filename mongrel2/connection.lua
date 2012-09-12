@@ -41,8 +41,8 @@ Connection.__index = Connection
     for simplicity since that'll be fairly common.
 ]]
 
--- (code) (status)\r\n(headers)\r\n\r\n(body)
-local HTTP_FORMAT = 'HTTP/1.1 %s %s\r\n%s\r\n\r\n%s'
+-- (code) (status)\r\n(headers)\r\n\r\n
+local HTTP_FORMAT = 'HTTP/1.1 %s %s\r\n%s\r\n\r\n'
 
 local function http_response(body, code, status, headers)
     headers['content-length'] = length(body)
@@ -52,7 +52,9 @@ local function http_response(body, code, status, headers)
         insert(raw, format('%s: %s', k, v))
     end
 
-    return format(HTTP_FORMAT, code, status, concat(raw, '\r\n'), body)
+    -- string.format will truncate string at NUL, so we must use '..' to
+    --  support NUL in body
+    return format(HTTP_FORMAT, code, status, concat(raw, '\r\n'))..body
 end
 
 --[[
